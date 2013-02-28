@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+
+import json
+import os
+import sys
+import random
+
+from datetime import date, timedelta
+
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+data_location = current_directory + "/.coffee_data"
+
+
+def read_data():
+    if not os.path.exists(data_location):
+        current_data = dict()
+    else:
+        data_file = open(data_location, 'r')
+        current_data = json.load(data_file)
+        data_file.close()
+    return current_data
+
+def save_data(data):
+    data_file = open(data_location, 'w')
+    json.dump(data, data_file)
+    data_file.close()
+
+current_data = read_data()
+
+
+today = date.today()
+
+if (str(today) in current_data):
+    print("No! You already had coffee today")
+    sys.exit()
+
+# First check, if I've had coffee three days in a row, say no
+
+MAX_LOOKBACK = 10
+yes_three_days_in_a_row = False
+num_yes = 0
+
+for i in range(1, MAX_LOOKBACK):
+    previous_day = today - timedelta(days=i)
+    if str(previous_day) in current_data:
+        if current_data[str(previous_day)] == True:
+            num_yes += 1
+            if num_yes == 3:
+                yes_three_days_in_a_row = True
+                break
+        else:
+            break
+
+if yes_three_days_in_a_row == True:
+    current_data[str(today)] = False
+    print("No! Too much coffee!")
+else:
+    # Then randomize, let's say 50% chance I get coffee
+    flip = random.randint(0, 1)
+
+    if flip == 0:
+        current_data[str(today)] = False
+        print("No! Today's not your lucky day.")
+    else:
+        current_data[str(today)] = True
+        print("Yes! You get coffee today.")
+
+save_data(current_data)
