@@ -21,9 +21,9 @@ def read_data():
     return current_data
 
 def save_data(data):
-    data_file = open(data_location, 'w')
-    json.dump(data, data_file)
-    data_file.close()
+    with open(data_location, 'w') as data_file:    
+        json.dump(data, data_file)
+
 
 current_data = read_data()
 
