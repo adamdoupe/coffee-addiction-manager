@@ -16,9 +16,8 @@ def read_data():
     if not os.path.exists(data_location):
         current_data = dict()
     else:
-        data_file = open(data_location, 'r')
-        current_data = json.load(data_file)
-        data_file.close()
+        with open(data_location, 'r') as data_file:
+            current_data = json.load(data_file)
     return current_data
 
 def save_data(data):
