@@ -7,9 +7,9 @@ import random
 
 from datetime import date, timedelta
 
-config_directory = os.path.dirname(os.environ["HOME"] + "/.config")
+current_directory = os.path.dirname(os.path.abspath(__file__))
 
-data_location = config_directory + "/.coffee_data"
+data_location = current_directory + "/.coffee_data"
 
 
 def read_data():
