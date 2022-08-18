@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import json
 import os
@@ -7,9 +7,9 @@ import random
 
 from datetime import date, timedelta
 
-current_directory = os.path.dirname(os.path.abspath(__file__))
+config_directory = os.path.dirname(os.environ["HOME"] + "/.config")
 
-data_location = current_directory + "/.coffee_data"
+data_location = config_directory + "/.coffee_data"
 
 
 def read_data():
@@ -17,7 +17,11 @@ def read_data():
         current_data = dict()
     else:
         with open(data_location, 'r') as data_file:
-            current_data = json.load(data_file)
+            try:
+                current_data = json.load(data_file)
+            except Exception:
+                print("[-] Malformed .coffe_data file detected")
+                current_data = dict()
     return current_data
 
 def save_data(data):
@@ -39,7 +43,7 @@ if (str(today) in current_data):
 MAX_LOOKBACK = 10
 yes_three_days_in_a_row = False
 num_yes = 0
-
+bad_week = False
 for i in range(1, MAX_LOOKBACK):
     previous_day = today - timedelta(days=i)
     if str(previous_day) in current_data:
@@ -56,7 +60,14 @@ if yes_three_days_in_a_row == True:
     print("No! Too much coffee!")
 else:
     # Then randomize, let's say 50% chance I get coffee
-    flip = random.randint(0, 1)
+    hard_day = input("Do we have a hard day ahead of us? [Y/N]: ").upper() == "Y"
+
+    flip = 0
+
+    if hard_day:
+        flip = random.randint(0,2)
+    else:
+        flip = random.randint(0, 1)
 
     if flip == 0:
         current_data[str(today)] = False
