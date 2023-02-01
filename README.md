@@ -3,7 +3,7 @@ to allow one to enjoy coffee without developing an addiction.
 
 You run the command `can_i_have_coffee` and it will tell you yes or no.
 
-Currently, you have a 50% chance of having coffee on any given day.
+Currently, you have a 50% chance of having coffee on any given day. (66% if you are having a hard day)
 
 However, if you have coffee for three days in a row, you can't have
 coffee today (to prevent a dependence).
